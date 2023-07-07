@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abhijith Playlist Holder</title>
+</head>
+<body>
+    <center>
+    <div>
+        <h2>Songs that are already in playlist:</h2>
+    <ul>
+<% for(var i = 0; i < songsList.length; i++){ %>
+    <li>
+        <a href= <%= songsList[i].link %> target="_blank"> 
+            <%= songsList[i].title %> 
+        </a>
+    </li>
+<% } %>
+</ul>
+</div>
+    
+    <form action="/add" method="post">
+        <label for="title">Enter the title of the song: </label>
+        <input name="title" placeholder="Title" type="text">
+        <br>
+        <label for="link">Enter the link to the Song: </label>
+        <input name="link" placeholder="Link" type="text">
+        <br>
+        <button type="submit">Add to Playlist</button>
+    </form>
+
+    <form action="/remove" method="post">
+        <label for="title">Select the title of the song to remove: </label>
+        <select name="removeTitle">
+            <% for(var i=0; i < songsList.length; i++){ %>
+                <option value=<%= songsList[i].title %>>
+                        <%= songsList[i].title %>
+                </option>
+                <% } %>
+        </select>
+        <br>
+        <button type="submit">Remove from Playlist</button>
+    </form>
+    
+    </center>
+</body>
+</html>
