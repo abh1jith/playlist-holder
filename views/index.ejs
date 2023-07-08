@@ -2,46 +2,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <title>Abhijith Playlist Holder</title>
 </head>
-<body>
+<body >
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid d-flex justify-content-center">
+        <a class="navbar-brand"><code>ABHIJITH's PLAYLIST</code></a>
+        
+    </div></nav>
+    <div class="container">
     <center>
+        <br>
     <div>
-        <h2>Songs that are already in playlist:</h2>
-    <ul>
-<% for(var i = 0; i < songsList.length; i++){ %>
-    <li>
-        <a href= <%= songsList[i].link %> target="_blank"> 
-            <%= songsList[i].title %> 
-        </a>
-    </li>
-<% } %>
-</ul>
-</div>
-    
-    <form action="/add" method="post">
-        <label for="title">Enter the title of the song: </label>
-        <input name="title" placeholder="Title" type="text">
-        <br>
-        <label for="link">Enter the link to the Song: </label>
-        <input name="link" placeholder="Link" type="text">
-        <br>
-        <button type="submit">Add to Playlist</button>
-    </form>
+        <div class="card text-center">
+            <div class="card-header">
+                <h4>Songs that are already in playlist:</h4>
+            </div>
+            <div class="card-body">
+        
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Song Name</th>
+                    <th scope="col">Added by User</th>
+                    <th scope="col">Platform</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <% for(var i=0; i < songsList.length; i++){ %>
+                    <tr>
+                    <th scope="row"> <%= i + 1 %></th>
+                    <td>
+                        <a href=<%= songsList[i].link %> target="_blank">
+                            <%= songsList[i].title %>
+                        </a>
+                    </td>
+                    <td> 
+                        <%= songsList[i].user %> 
+                    </td>
+                    
+                    <td>
+                    <% if(songsList[i].platform == "youtube"){ %>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Logo_of_YouTube_%282015-2017%29.svg" width="70">
+                    <% } %>
+                    <% if(songsList[i].platform == "spotify"){ %>
+                        <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_Green.png" width="70">
+                    <% } %>
+                    <% if(songsList[i].platform == "apple"){ %>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Apple_Music_logo.svg" width="70">
+                    <% } %>
+                    <% if(songsList[i].platform=="wynk" ){ %>
+                        <img src="data:image/png;base64,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" width="120">
+                    <% } %>
+                    <% if(songsList[i].platform=="gaana" ){ %>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/01/Gaana_logo.svg"
+                            width="70">
+                    <% } %>
+                        <!-- <%= songsList[i].platform %> -->
+                    </td>
+                    </tr>
+                    <% } %>
+                
+            </tbody>
+        </table>
+        </div>
 
-    <form action="/remove" method="post">
-        <label for="title">Select the title of the song to remove: </label>
-        <select name="removeTitle">
-            <% for(var i=0; i < songsList.length; i++){ %>
-                <option value=<%= songsList[i].title %>>
-                        <%= songsList[i].title %>
-                </option>
-                <% } %>
-        </select>
-        <br>
-        <button type="submit">Remove from Playlist</button>
+</div>
+<br>
+
+    <div class="card text-center">
+        <div class="card-header">
+            <h4>Add a New song to the playlist</h4>
+        </div>
+        <div class="card-body">
+    <form action="/add" method="post">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">Enter the title of the song:</span>
+            <input type="text" name="title" class="form-control" >
+        </div>
+        <div class="input-group flex-nowrap">
+        <span class="input-group-text" id="addon-wrapping-link">Enter the link to the Song:</span>
+        <input type="text" name="link" class="form-control" >
+
+        </div>
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text"   id="addon-wrapping-link">Choose the platform of the link:</span>
+            <select class="form-select" name="platform">
+                <option value="youtube">Youtube</option>
+                <option value="spotify">Spotify</option>
+                <option value="apple">Apple Music</option>
+                <option value="wynk">Wynk Music</option>
+                <option value="gaana">Gaana</option>
+
+            </select>
+        </div>
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text"  id="addon-wrapping-link">Enter your name:</span>
+            <input type="text" name="user" class="form-control">
+        
+        </div>
+        <button type="submit" class="btn btn-primary">Add to Playlist</button>
     </form>
-    
+    </div>
+    </div>
+<br>
+    <div class="card text-center ">
+    <div class="card-header">
+        <h4>Remove a song from the playlist</h4>
+    </div>
+    <div class="card-body">
+        <form action="/remove" method="post">
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text" id="addon-wrapping-link">Select the title of the song to remove:</span>
+                <select class="form-select" name="removeTitle">
+                    <% for(var i=0; i < songsList.length; i++){ %>
+                        <option value= <%= songsList[i].title %>>
+                            <%= songsList[i].title %>
+                        </option>
+                        <% } %>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Remove from Playlist</button>
+        </form>
+    </div>
+    </div>
+
     </center>
+    </div>
+    
+    <div class="container">
+        <footer class="py-3 my-4">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
+                <li class="nav-item"><a href="https://abhijithdameruppala.netlify.app/" class="nav-link px-2 text-body-secondary"  target="_blank">Portfolio</a></li>
+                <li class="nav-item"><a href="https://github.com/abh1jith" class="nav-link px-2 text-body-secondary"  target="_blank">Github</a></li>
+                <li class="nav-item"><a href="https://www.linkedin.com/in/abhijithdameruppala/" class="nav-link px-2 text-body-secondary"  target="_blank">LinkedIn</a></li>
+            </ul>
+            <p class="text-center text-body-secondary">&copy; 2023 ABHIJITH DAMERUPPALA</p>
+        </footer>
+    </div>
 </body>
+
 </html>
