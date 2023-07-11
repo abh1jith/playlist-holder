@@ -83,7 +83,23 @@
         </div>
 
 </div>
-
+<p style="font-size: large;">
+    <center>
+        <%= setup %> <br>
+            <div id="delivery" style="display: none;">
+                <%= delivery %> <br>
+            </div>
+            <button onclick="clickl()" class="btn btn-secondary" id="btn">Because</button>
+    </center>
+</p>
+<script>
+    function clickl() {
+        if (document.getElementById("delivery").style.display === "none") {
+            document.getElementById("delivery").style.display = "";
+            document.getElementById("btn").style.display = "none";
+        }
+    }
+</script>
 <br>
 
     <div class="card text-center">
@@ -102,7 +118,7 @@
 
         </div>
         <div class="input-group flex-nowrap">
-            <span class="input-group-text"   id="addon-wrapping-link">Choose the platform of the link:</span>
+            <span class="input-group-text"   id="addon-wrapping-link">Choose the platform:</span>
             <select class="form-select" name="platform">
                 <option value="youtube">Youtube</option>
                 <option value="spotify">Spotify</option>
@@ -129,7 +145,7 @@
     <div class="card-body">
         <form action="/remove" method="post">
             <div class="input-group flex-nowrap">
-                <span class="input-group-text" id="addon-wrapping-link">Select the title of the song to remove:</span>
+                <span class="input-group-text" id="addon-wrapping-link">Select the song to remove:</span>
                 <% if(songsList.length==0){ %>
                     <select class="form-select" aria-label="Disabled select example" disabled></select>
                 <% }else{ %>

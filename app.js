@@ -5,37 +5,6 @@ const https = require("https");
 const mongoose = require("mongoose");
 
 
-function timeConverter(inp){
-    var hours = 0;
-    var min = 0;
-    var sec = 0;
-    let h = 1;
-    let m = 1;
-    let s = 1;
-        for (var i = 2; i < inp.length; i ++){
-        if(inp[i] == "H"){
-            h = i;
-        }
-        if(inp[i] == "M"){
-            m = i;
-        }
-        if(inp[i] == "S"){
-            s = i;
-        }
-    }
-    for (var i = 2; i < h; i ++){
-        hours = hours * 10 + Number(inp[i])
-    }
-    for (var i = h + 1; i < m; i ++){
-        min = min * 10 + Number(inp[i])
-    }
-    for (var i = m + 1; i < s; i ++){
-        sec = sec * 10 + Number(inp[i])
-    }
-    sec = sec + (hours * 3600) + (min * 60);
-    return sec;
-}
-
 const app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -78,9 +47,7 @@ app.post("/remove", function(req, res){
         .catch(err => {
             console.error(err);
         });
-    
     res.redirect("/");
-    
 })
 
 app.get("/", function(req, res){
@@ -88,25 +55,56 @@ app.get("/", function(req, res){
     songs.find({})
         .then(songs => {
         console.log(songs);
-        // Sending the stuff to the frontend
-        res.render("index", {songsList: songs});
-    })
-        .catch(err => {
-        console.error(err);
+//         const url = "https://v2.jokeapi.dev/joke/Programming?blacklistFlags=racist,sexist&type=twopart";
+//         try{
+//             https.get(url, function(response){
+//         response.on("data", function(data){
+//             const jokeData = JSON.parse(data);
+//             console.log(jokeData.setup, jokeData.delivery);
+//             res.render("index", {songsList: songs, setup: jokeData.setup, delivery: jokeData.delivery});
+//         });
+//     });
+// }   catch{
+//     res.render("index", {songsList: songs, setup: "Joke cannot be loaded at this time", delivery: "Please reload / try again later"});
+// }
+//         // Sending the stuff to the frontend
+//     })
+//         .catch(err => {
+//         console.error(err);
+//     });
+    
+    const url = "https://v2.jokeapi.dev/joke/Programming?blacklistFlags=racist,sexist&type=twopart";
+
+try {
+  https.get(url, function(response) {
+    let responseData = "";
+
+    response.on("data", function(data) {
+      responseData += data;
     });
-    // var vidLink = "YBkfHAVKwNE";
-    // var ytURL = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=" + vidLink + "&key=" + ytAPI;
-    // https.get(ytURL, function(response){
-    //     response.on("data", function(data){
-    //         let datainp = JSON.parse(data);
-    //         console.log(timeConverter(datainp.items[0].contentDetails.duration));
-    //     });
-    // });
+
+    response.on("end", function() {
+      try {
+        const jokeData = JSON.parse(responseData);
+        console.log(jokeData.setup, jokeData.delivery);
+        res.render("index", { songsList: songs, setup: jokeData.setup, delivery: jokeData.delivery });
+      } catch (error) {
+        console.error("Error parsing JSON response:", error);
+        res.render("index", { songsList: songs, setup: "Joke cannot be loaded at this time", delivery: "Please reload / try again later" });
+      }
+    });
+  });
+} catch (error) {
+  console.error("Error in API request:", error);
+  res.render("index", { songsList: songs, setup: "Joke cannot be loaded at this time", delivery: "Please reload / try again later" });
+}
+
+});
 });
 
-app.listen(3000, function(err){
+app.listen(process.env.PORT || 3000, function(err){
     if(err){
         throw(err);
     }
-    console.log("Server has started on port: 3000");
+    console.log("Server has started");
 });
